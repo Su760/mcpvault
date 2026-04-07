@@ -11,7 +11,7 @@ use biscuit_auth::builder::{BiscuitBuilder, BlockBuilder, Term};
 use biscuit_auth::error;
 
 /// Convert SystemTime to TAI-compatible u64 seconds since Unix epoch.
-fn system_time_to_tai_secs(t: SystemTime) -> u64 {
+pub(crate) fn system_time_to_tai_secs(t: SystemTime) -> u64 {
     t.duration_since(UNIX_EPOCH)
         .expect("time must be after Unix epoch")
         .as_secs()
@@ -165,38 +165,8 @@ pub fn check_delegation_cap(
 }
 
 // ---------------------------------------------------------------------------
-// Attenuation-block fact builders (BlockBuilder)
+// Attenuation-block check builders (BlockBuilder)
 // ---------------------------------------------------------------------------
-
-/// Adds `tool({name})` fact to an attenuation block.
-pub fn block_fact_tool(
-    builder: BlockBuilder,
-    tool_name: &str,
-) -> Result<BlockBuilder, error::Token> {
-    let mut params = HashMap::new();
-    params.insert("name".to_string(), Term::Str(tool_name.to_string()));
-    builder.code_with_params(
-        r#"tool({name})"#,
-        params,
-        HashMap::new(),
-    )
-}
-
-/// Adds `operation({tool}, {op})` fact to an attenuation block.
-pub fn block_fact_operation(
-    builder: BlockBuilder,
-    tool: &str,
-    op: Operation,
-) -> Result<BlockBuilder, error::Token> {
-    let mut params = HashMap::new();
-    params.insert("tool".to_string(), Term::Str(tool.to_string()));
-    params.insert("op".to_string(), Term::Str(op.as_str().to_string()));
-    builder.code_with_params(
-        r#"operation({tool}, {op})"#,
-        params,
-        HashMap::new(),
-    )
-}
 
 /// Adds TTL check to an attenuation block.
 pub fn block_check_ttl(
