@@ -4,6 +4,21 @@ version = "0.1.0"
 edition = "2021"
 description = "CLI for mcpvault capability-token management"
 
+[[bin]]
+name = "mcpvault"
+path = "src/main.rs"
+
 [dependencies]
 clap = { version = "4", features = ["derive"] }
 mcpvault-core = { path = "../mcpvault-core" }
+biscuit-auth = "6.0"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+hex = "0.4"
+base64 = "0.22"
+dirs = "5"
+anyhow = "1"
+
+[dev-dependencies]
+tempfile = "3"
+serde_json = "1"
