@@ -9,3 +9,11 @@ biscuit-auth = "6.0"
 thiserror = "2"
 serde = { version = "1", features = ["derive"] }
 chrono = { version = "0.4", features = ["serde"] }
+hex = "0.4"
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+
+[[bench]]
+name = "verify_depth5"
+harness = false
