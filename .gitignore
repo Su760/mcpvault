@@ -1,0 +1,9 @@
+/target
+**/*.rs.bk
+Cargo.lock
+*.pyc
+__pycache__/
+.mcpvault/
+*.so
+*.dylib
+*.dll

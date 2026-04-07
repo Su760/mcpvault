@@ -1,0 +1,11 @@
+[package]
+name = "mcpvault-core"
+version = "0.1.0"
+edition = "2021"
+description = "Biscuit-based capability-token SDK for MCP authorization"
+
+[dependencies]
+biscuit-auth = "6.0"
+thiserror = "2"
+serde = { version = "1", features = ["derive"] }
+chrono = { version = "0.4", features = ["serde"] }

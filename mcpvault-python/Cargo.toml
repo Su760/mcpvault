@@ -1,0 +1,13 @@
+[package]
+name = "mcpvault-python"
+version = "0.1.0"
+edition = "2021"
+description = "Python bindings for mcpvault"
+
+[lib]
+name = "mcpvault"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.22", features = ["extension-module"] }
+mcpvault-core = { path = "../mcpvault-core" }

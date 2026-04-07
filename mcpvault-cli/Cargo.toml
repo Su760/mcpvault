@@ -1,0 +1,9 @@
+[package]
+name = "mcpvault-cli"
+version = "0.1.0"
+edition = "2021"
+description = "CLI for mcpvault capability-token management"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+mcpvault-core = { path = "../mcpvault-core" }

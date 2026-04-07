@@ -1,0 +1,7 @@
+[workspace]
+members = [
+    "mcpvault-core",
+    "mcpvault-python",
+    "mcpvault-cli",
+]
+resolver = "2"
