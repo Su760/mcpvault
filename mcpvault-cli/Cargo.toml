@@ -3,6 +3,12 @@ name = "mcpvault-cli"
 version = "0.1.0"
 edition = "2021"
 description = "CLI for mcpvault capability-token management"
+license = "Apache-2.0"
+repository = "https://github.com/supashramesha/agentvault"
+homepage = "https://github.com/supashramesha/agentvault"
+keywords = ["mcp", "biscuit", "authorization", "cli", "tokens"]
+categories = ["authentication", "command-line-utilities"]
+readme = "../README.md"
 
 [[bin]]
 name = "mcpvault"

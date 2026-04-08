@@ -3,6 +3,12 @@ name = "mcpvault-core"
 version = "0.1.0"
 edition = "2021"
 description = "Biscuit-based capability-token SDK for MCP authorization"
+license = "Apache-2.0"
+repository = "https://github.com/supashramesha/agentvault"
+homepage = "https://github.com/supashramesha/agentvault"
+keywords = ["mcp", "biscuit", "authorization", "capability", "tokens"]
+categories = ["authentication", "cryptography"]
+readme = "../README.md"
 
 [dependencies]
 biscuit-auth = "6.0"

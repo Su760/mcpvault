@@ -3,6 +3,12 @@ name = "mcpvault-python"
 version = "0.1.0"
 edition = "2021"
 description = "Python bindings for mcpvault"
+license = "Apache-2.0"
+repository = "https://github.com/supashramesha/agentvault"
+homepage = "https://github.com/supashramesha/agentvault"
+keywords = ["mcp", "biscuit", "authorization", "python", "tokens"]
+categories = ["authentication", "cryptography"]
+readme = "../README.md"
 
 [lib]
 name = "mcpvault"
