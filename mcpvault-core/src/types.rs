@@ -21,6 +21,15 @@ pub enum McpVaultError {
 
     #[error("token has been revoked")]
     TokenRevoked,
+
+    #[error("invalid X-MCPVault-Token header: expected base64-encoded token")]
+    InvalidHeader,
+
+    #[error("invalid JSON-RPC payload")]
+    InvalidJson,
+
+    #[error("token missing from JSON-RPC params._meta.token")]
+    MissingToken,
 }
 
 // ---------------------------------------------------------------------------
