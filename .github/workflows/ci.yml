@@ -62,16 +62,23 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install maturin and pytest
-        run: pip install maturin pytest
+      - name: Create virtualenv and install deps
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install maturin pytest
 
       - name: Build and install Python bindings
         working-directory: mcpvault-python
-        run: maturin develop
+        run: |
+          source ../.venv/bin/activate
+          maturin develop
 
       - name: Run Python tests
         working-directory: mcpvault-python
-        run: pytest
+        run: |
+          source ../.venv/bin/activate
+          pytest
 
   lint:
     name: Clippy + rustfmt

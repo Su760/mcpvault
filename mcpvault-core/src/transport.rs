@@ -36,8 +36,7 @@ pub fn extract_token_from_header(header: &str) -> Result<Vec<u8>, McpVaultError>
 /// The `json` argument must be a valid JSON object. The token is base64-encoded
 /// and written to `params._meta.token`, creating intermediate objects as needed.
 pub fn embed_token_in_jsonrpc(json: &str, token_bytes: &[u8]) -> Result<String, McpVaultError> {
-    let mut value: Value =
-        serde_json::from_str(json).map_err(|_| McpVaultError::InvalidJson)?;
+    let mut value: Value = serde_json::from_str(json).map_err(|_| McpVaultError::InvalidJson)?;
 
     let token_b64 = STANDARD.encode(token_bytes);
 
@@ -65,8 +64,7 @@ pub fn embed_token_in_jsonrpc(json: &str, token_bytes: &[u8]) -> Result<String, 
 /// Returns `McpVaultError::MissingToken` if the field is absent, and
 /// `McpVaultError::InvalidJson` if the JSON is malformed or the base64 is invalid.
 pub fn extract_token_from_jsonrpc(json: &str) -> Result<Vec<u8>, McpVaultError> {
-    let value: Value =
-        serde_json::from_str(json).map_err(|_| McpVaultError::InvalidJson)?;
+    let value: Value = serde_json::from_str(json).map_err(|_| McpVaultError::InvalidJson)?;
 
     let token_b64 = value
         .get("params")

@@ -42,7 +42,11 @@ fn test_mint_verify_roundtrip() {
     let provider = BiscuitProvider;
     let bytes = provider.mint(&keypair, default_mint_config()).unwrap();
     let facts = provider
-        .verify(&bytes, &keypair.public(), default_verify_options("db_query"))
+        .verify(
+            &bytes,
+            &keypair.public(),
+            default_verify_options("db_query"),
+        )
         .expect("verify should succeed");
     assert!(facts.tools.contains(&"db_query".to_string()));
 }
@@ -53,7 +57,11 @@ fn test_verify_wrong_tool_fails() {
     let keypair = KeyPair::new();
     let provider = BiscuitProvider;
     let bytes = provider.mint(&keypair, default_mint_config()).unwrap();
-    let result = provider.verify(&bytes, &keypair.public(), default_verify_options("other_tool"));
+    let result = provider.verify(
+        &bytes,
+        &keypair.public(),
+        default_verify_options("other_tool"),
+    );
     assert!(result.is_err(), "wrong tool should fail authorization");
 }
 
@@ -97,9 +105,7 @@ fn test_attenuate_restricts_tool_scope() {
         ttl: None,
         max_delegation_depth: None,
     };
-    let attenuated = provider
-        .attenuate(&token, &keypair.public(), att)
-        .unwrap();
+    let attenuated = provider.attenuate(&token, &keypair.public(), att).unwrap();
 
     // db_query should still work
     provider
@@ -153,7 +159,11 @@ fn test_token_valid_within_ttl() {
     let provider = BiscuitProvider;
     let bytes = provider.mint(&keypair, default_mint_config()).unwrap();
     provider
-        .verify(&bytes, &keypair.public(), default_verify_options("db_query"))
+        .verify(
+            &bytes,
+            &keypair.public(),
+            default_verify_options("db_query"),
+        )
         .expect("token should be valid within TTL");
 }
 
@@ -175,9 +185,7 @@ fn test_attenuate_tighter_ttl() {
         ttl: Some(Duration::from_secs(30)),
         max_delegation_depth: None,
     };
-    let attenuated = provider
-        .attenuate(&token, &keypair.public(), att)
-        .unwrap();
+    let attenuated = provider.attenuate(&token, &keypair.public(), att).unwrap();
 
     // 60 seconds later — should fail (past 30s TTL)
     let slightly_future = SystemTime::now() + Duration::from_secs(60);
@@ -220,11 +228,16 @@ fn test_delegation_depth_cap_enforced() {
         resource_limits: None,
         ttl: None,
     };
-    let token2 = provider.attenuate(&token1, &keypair.public(), att2).unwrap();
+    let token2 = provider
+        .attenuate(&token1, &keypair.public(), att2)
+        .unwrap();
 
     // delegation_depth(0) < 0 is false → check fails
-    let result =
-        provider.verify(&token2, &keypair.public(), default_verify_options("db_query"));
+    let result = provider.verify(
+        &token2,
+        &keypair.public(),
+        default_verify_options("db_query"),
+    );
     assert!(
         result.is_err(),
         "token with exceeded delegation cap should fail"
@@ -252,7 +265,11 @@ fn test_malformed_token_rejected() {
     let keypair = KeyPair::new();
     let provider = BiscuitProvider;
     let garbage: Vec<u8> = vec![0xDE, 0xAD, 0xBE, 0xEF, 0x00, 0x11, 0x22];
-    let result = provider.verify(&garbage, &keypair.public(), default_verify_options("db_query"));
+    let result = provider.verify(
+        &garbage,
+        &keypair.public(),
+        default_verify_options("db_query"),
+    );
     assert!(result.is_err(), "malformed bytes should fail");
 }
 
@@ -273,7 +290,10 @@ fn test_revoked_token_rejected() {
     };
     let result = provider.verify(&bytes, &keypair.public(), opts);
     assert!(
-        matches!(result, Err(mcpvault_core::types::McpVaultError::TokenRevoked)),
+        matches!(
+            result,
+            Err(mcpvault_core::types::McpVaultError::TokenRevoked)
+        ),
         "token in revocation list should be rejected"
     );
 }
@@ -298,9 +318,7 @@ fn test_inspect_block_count() {
         ttl: Some(Duration::from_secs(1800)),
         max_delegation_depth: None,
     };
-    let attenuated = provider
-        .attenuate(&token, &keypair.public(), att)
-        .unwrap();
+    let attenuated = provider.attenuate(&token, &keypair.public(), att).unwrap();
     let info2 = provider.inspect(&attenuated).unwrap();
     assert_eq!(info2.block_count, 2, "one attenuation adds one block");
 }
@@ -325,9 +343,14 @@ fn test_inspect_revocation_ids_nonempty() {
     let provider = BiscuitProvider;
     let token = provider.mint(&keypair, default_mint_config()).unwrap();
     let info = provider.inspect(&token).unwrap();
-    assert!(!info.revocation_ids.is_empty(), "must have at least one revocation ID");
     assert!(
-        info.revocation_ids[0].chars().all(|c| c.is_ascii_hexdigit()),
+        !info.revocation_ids.is_empty(),
+        "must have at least one revocation ID"
+    );
+    assert!(
+        info.revocation_ids[0]
+            .chars()
+            .all(|c| c.is_ascii_hexdigit()),
         "revocation ID should be hex-encoded"
     );
 }
@@ -358,8 +381,11 @@ fn test_resource_limit_check_enforced() {
     };
     let attenuated = provider.attenuate(&token, &keypair.public(), att).unwrap();
 
-    let result =
-        provider.verify(&attenuated, &keypair.public(), default_verify_options("db_query"));
+    let result = provider.verify(
+        &attenuated,
+        &keypair.public(),
+        default_verify_options("db_query"),
+    );
     assert!(
         result.is_err(),
         "tighter resource cap should reject tokens with higher limits"
@@ -373,7 +399,11 @@ fn test_authorized_facts_include_identity() {
     let provider = BiscuitProvider;
     let bytes = provider.mint(&keypair, default_mint_config()).unwrap();
     let facts = provider
-        .verify(&bytes, &keypair.public(), default_verify_options("db_query"))
+        .verify(
+            &bytes,
+            &keypair.public(),
+            default_verify_options("db_query"),
+        )
         .unwrap();
     assert_eq!(facts.issuer.as_deref(), Some("test-issuer"));
     assert_eq!(facts.subject.as_deref(), Some("test-agent"));

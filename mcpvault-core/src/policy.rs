@@ -47,11 +47,7 @@ impl Operation {
 pub fn fact_tool(builder: BiscuitBuilder, tool_name: &str) -> Result<BiscuitBuilder, error::Token> {
     let mut params = HashMap::new();
     params.insert("name".to_string(), Term::Str(tool_name.to_string()));
-    builder.code_with_params(
-        r#"tool({name})"#,
-        params,
-        HashMap::new(),
-    )
+    builder.code_with_params(r#"tool({name})"#, params, HashMap::new())
 }
 
 /// Adds `tool_wildcard("*")` — grants access to all tools.
@@ -68,11 +64,7 @@ pub fn fact_operation(
     let mut params = HashMap::new();
     params.insert("tool".to_string(), Term::Str(tool.to_string()));
     params.insert("op".to_string(), Term::Str(op.as_str().to_string()));
-    builder.code_with_params(
-        r#"operation({tool}, {op})"#,
-        params,
-        HashMap::new(),
-    )
+    builder.code_with_params(r#"operation({tool}, {op})"#, params, HashMap::new())
 }
 
 /// Adds `resource_limit({tool}, {key}, {max})` — numeric constraint.
@@ -100,11 +92,7 @@ pub fn fact_delegation_depth(
 ) -> Result<BiscuitBuilder, error::Token> {
     let mut params = HashMap::new();
     params.insert("depth".to_string(), Term::Integer(depth as i64));
-    builder.code_with_params(
-        r#"delegation_depth({depth})"#,
-        params,
-        HashMap::new(),
-    )
+    builder.code_with_params(r#"delegation_depth({depth})"#, params, HashMap::new())
 }
 
 /// Adds `issuer({id})` and `subject({sub})` identity facts.
@@ -116,11 +104,7 @@ pub fn fact_identity(
     let mut params = HashMap::new();
     params.insert("id".to_string(), Term::Str(issuer.to_string()));
     params.insert("sub".to_string(), Term::Str(subject.to_string()));
-    builder.code_with_params(
-        "issuer({id});\nsubject({sub})",
-        params,
-        HashMap::new(),
-    )
+    builder.code_with_params("issuer({id});\nsubject({sub})", params, HashMap::new())
 }
 
 // ---------------------------------------------------------------------------
@@ -133,7 +117,10 @@ pub fn check_ttl(
     expiry: SystemTime,
 ) -> Result<BiscuitBuilder, error::Token> {
     let mut params = HashMap::new();
-    params.insert("expiry".to_string(), Term::Date(system_time_to_tai_secs(expiry)));
+    params.insert(
+        "expiry".to_string(),
+        Term::Date(system_time_to_tai_secs(expiry)),
+    );
     builder.code_with_params(
         r#"check if time($t), $t < {expiry}"#,
         params,
@@ -174,7 +161,10 @@ pub fn block_check_ttl(
     expiry: SystemTime,
 ) -> Result<BlockBuilder, error::Token> {
     let mut params = HashMap::new();
-    params.insert("expiry".to_string(), Term::Date(system_time_to_tai_secs(expiry)));
+    params.insert(
+        "expiry".to_string(),
+        Term::Date(system_time_to_tai_secs(expiry)),
+    );
     builder.code_with_params(
         r#"check if time($t), $t < {expiry}"#,
         params,

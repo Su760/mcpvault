@@ -8,8 +8,8 @@ use biscuit_auth::{AuthorizerBuilder, Biscuit, KeyPair, PublicKey, UnverifiedBis
 
 use crate::policy::{
     authorizer_policy, block_check_delegation_cap, block_check_resource_limit, block_check_ttl,
-    check_delegation_cap, check_ttl_duration, fact_delegation_depth, fact_identity,
-    fact_operation, fact_resource_limit, fact_tool, fact_tool_wildcard, system_time_to_tai_secs,
+    check_delegation_cap, check_ttl_duration, fact_delegation_depth, fact_identity, fact_operation,
+    fact_resource_limit, fact_tool, fact_tool_wildcard, system_time_to_tai_secs,
 };
 use crate::types::{
     AttenuateConfig, AuthorizedFacts, McpVaultError, MintConfig, TokenInfo, VerifyOptions,
@@ -150,7 +150,10 @@ impl TokenProvider for BiscuitProvider {
         time_params.insert("t".to_string(), Term::Date(now_secs));
 
         let mut tool_params = HashMap::new();
-        tool_params.insert("tool".to_string(), Term::Str(options.requested_tool.clone()));
+        tool_params.insert(
+            "tool".to_string(),
+            Term::Str(options.requested_tool.clone()),
+        );
 
         let mut ab = AuthorizerBuilder::new();
         ab = ab.code_with_params("time({t});", time_params, HashMap::new())?;
@@ -164,9 +167,7 @@ impl TokenProvider for BiscuitProvider {
             .map_err(|_| McpVaultError::AuthorizationFailed)?;
 
         // Extract facts from the world via query rules
-        let tools: Vec<(String,)> = authorizer
-            .query("q($n) <- tool($n)")
-            .unwrap_or_default();
+        let tools: Vec<(String,)> = authorizer.query("q($n) <- tool($n)").unwrap_or_default();
         let wildcard: Vec<(String,)> = authorizer
             .query("q($w) <- tool_wildcard($w)")
             .unwrap_or_default();
@@ -179,12 +180,8 @@ impl TokenProvider for BiscuitProvider {
         let depths: Vec<(i64,)> = authorizer
             .query("q($d) <- delegation_depth($d)")
             .unwrap_or_default();
-        let issuers: Vec<(String,)> = authorizer
-            .query("q($i) <- issuer($i)")
-            .unwrap_or_default();
-        let subjects: Vec<(String,)> = authorizer
-            .query("q($s) <- subject($s)")
-            .unwrap_or_default();
+        let issuers: Vec<(String,)> = authorizer.query("q($i) <- issuer($i)").unwrap_or_default();
+        let subjects: Vec<(String,)> = authorizer.query("q($s) <- subject($s)").unwrap_or_default();
 
         Ok(AuthorizedFacts {
             tools: tools.into_iter().map(|(n,)| n).collect(),

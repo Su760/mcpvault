@@ -97,8 +97,9 @@ fn parse_attenuate_config(d: &Bound<'_, PyDict>) -> PyResult<AttenuateConfig> {
         }
         None => None,
     };
-    let resource_limits: Option<Vec<(String, String, i64)>> =
-        d.get_item("resource_limits")?.and_then(|v| v.extract().ok());
+    let resource_limits: Option<Vec<(String, String, i64)>> = d
+        .get_item("resource_limits")?
+        .and_then(|v| v.extract().ok());
     Ok(AttenuateConfig {
         tools,
         operations,

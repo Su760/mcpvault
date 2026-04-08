@@ -16,7 +16,9 @@ use mcpvault_core::transport::{
     build_header_value, embed_token_in_jsonrpc, extract_token_from_header,
     extract_token_from_jsonrpc,
 };
-use mcpvault_core::types::{AttenuateConfig, AuthorizedFacts, McpVaultError, MintConfig, VerifyOptions};
+use mcpvault_core::types::{
+    AttenuateConfig, AuthorizedFacts, McpVaultError, MintConfig, VerifyOptions,
+};
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -95,8 +97,8 @@ fn test_mint_verify_via_http_header() {
     let header_value = build_header_value(&token_bytes);
 
     // Server extracts token bytes from header
-    let extracted = extract_token_from_header(&header_value)
-        .expect("header extraction should succeed");
+    let extracted =
+        extract_token_from_header(&header_value).expect("header extraction should succeed");
 
     // Server verifies
     let facts = verify_mcp_request(&extracted, &keypair.public(), "db_query", None)
@@ -115,12 +117,12 @@ fn test_mint_verify_via_jsonrpc_envelope() {
 
     // Client embeds token in JSON-RPC request
     let req = McpRequest::new("tools/call", "db_query", 1);
-    let json_with_token = embed_token_in_jsonrpc(&req.to_json(), &token_bytes)
-        .expect("embed should succeed");
+    let json_with_token =
+        embed_token_in_jsonrpc(&req.to_json(), &token_bytes).expect("embed should succeed");
 
     // MCP server extracts token from JSON-RPC
-    let extracted = extract_token_from_jsonrpc(&json_with_token)
-        .expect("jsonrpc extraction should succeed");
+    let extracted =
+        extract_token_from_jsonrpc(&json_with_token).expect("jsonrpc extraction should succeed");
 
     // Server verifies
     let facts = verify_mcp_request(&extracted, &keypair.public(), "db_query", None)

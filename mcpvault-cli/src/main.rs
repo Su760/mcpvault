@@ -142,11 +142,16 @@ fn main() -> Result<()> {
             println!("{}", key_file.public_key);
         }
 
-        Commands::Mint { key, tools, ttl, issuer, subject } => {
-            let key_data: KeyFile = serde_json::from_str(
-                &fs::read_to_string(&key).context("failed to read key file")?,
-            )
-            .context("invalid key file JSON")?;
+        Commands::Mint {
+            key,
+            tools,
+            ttl,
+            issuer,
+            subject,
+        } => {
+            let key_data: KeyFile =
+                serde_json::from_str(&fs::read_to_string(&key).context("failed to read key file")?)
+                    .context("invalid key file JSON")?;
 
             let priv_bytes =
                 hex::decode(&key_data.private_key).context("invalid private key hex")?;
@@ -168,7 +173,12 @@ fn main() -> Result<()> {
             println!("{}", B64.encode(&token_bytes));
         }
 
-        Commands::Attenuate { token, pubkey, tools, ttl } => {
+        Commands::Attenuate {
+            token,
+            pubkey,
+            tools,
+            ttl,
+        } => {
             let token_bytes = B64.decode(&token).context("invalid base64 token")?;
             let pub_key = load_public_key(&pubkey)?;
 
@@ -184,7 +194,11 @@ fn main() -> Result<()> {
             println!("{}", B64.encode(&new_bytes));
         }
 
-        Commands::Verify { token, pubkey, tool } => {
+        Commands::Verify {
+            token,
+            pubkey,
+            tool,
+        } => {
             let token_bytes = B64.decode(&token).context("invalid base64 token")?;
             let pub_key = load_public_key(&pubkey)?;
 
