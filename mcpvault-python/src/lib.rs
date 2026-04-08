@@ -1,3 +1,6 @@
+#![allow(unexpected_cfgs)]
+#![allow(clippy::useless_conversion)]
+
 use base64::{engine::general_purpose::STANDARD as B64, Engine as _};
 use biscuit_auth::{Algorithm, KeyPair, PrivateKey, PublicKey};
 use mcpvault_core::{
