@@ -94,6 +94,19 @@ jobs:
         working-directory: mcpvault-express
         run: npm test
 
+  docs-build:
+    name: Docs Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install mkdocs-material
+        run: pip install mkdocs-material
+      - name: Build docs
+        run: mkdocs build --strict
+
   lint:
     name: Clippy + rustfmt
     runs-on: ubuntu-latest

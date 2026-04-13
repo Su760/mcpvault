@@ -1,5 +1,8 @@
 # AgentVault
 
+[![CI](https://github.com/Su760/mcpvault/actions/workflows/ci.yml/badge.svg)](https://github.com/Su760/mcpvault/actions/workflows/ci.yml)
+[![Docs](https://img.shields.io/badge/docs-mcpvault-blue)](https://su760.github.io/mcpvault)
+
 **Biscuit-based capability tokens for MCP tool authorization.**
 
 OAuth-style delegation for AI agents: mint scoped tokens, attenuate them per-hop, and verify them at MCP servers — without a central auth server.
@@ -125,12 +128,14 @@ npm install mcpvault-express
 ```
 
 ```javascript
-import { createMcpVaultMiddleware } from 'mcpvault-express';
+import { createMcpVaultMiddleware } from "mcpvault-express";
 
-const auth = createMcpVaultMiddleware({ publicKeyHex: process.env.MCPVAULT_PUBLIC_KEY });
+const auth = createMcpVaultMiddleware({
+  publicKeyHex: process.env.MCPVAULT_PUBLIC_KEY,
+});
 
 // Protect a MCP route — only tokens scoped to tool("db_query") can proceed
-app.post('/mcp', auth('db_query'), (req, res) => {
+app.post("/mcp", auth("db_query"), (req, res) => {
   // req.mcpvaultFacts.verified === true on success
   res.json({ ok: true });
 });
