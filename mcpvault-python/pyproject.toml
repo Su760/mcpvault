@@ -8,6 +8,9 @@ version = "0.1.0"
 description = "Biscuit-based capability-token SDK for MCP authorization"
 requires-python = ">=3.9"
 
+[project.optional-dependencies]
+fastapi = ["fastapi>=0.100.0", "httpx>=0.24.0"]
+
 [tool.maturin]
 features = ["pyo3/extension-module"]
 
