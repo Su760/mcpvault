@@ -66,7 +66,7 @@ jobs:
         run: |
           python -m venv .venv
           source .venv/bin/activate
-          pip install maturin pytest
+          pip install maturin pytest fastapi httpx
 
       - name: Build and install Python bindings
         working-directory: mcpvault-python
@@ -87,8 +87,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: "npm"
-          cache-dependency-path: mcpvault-express/package-lock.json
       - name: Install dependencies
         working-directory: mcpvault-express
         run: npm install
