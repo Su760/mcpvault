@@ -151,7 +151,9 @@ class MCPVaultAuth:
                 r"check if time\(\$t\),\s*\$t\s*<\s*(\S+Z)", combined
             )
             if match:
-                expiry = datetime.fromisoformat(match.group(1).rstrip(";"))
+                expiry_str = match.group(1).rstrip(";")
+                # Python 3.10 fromisoformat() doesn't accept the 'Z' suffix
+                expiry = datetime.fromisoformat(expiry_str.replace("Z", "+00:00"))
                 return datetime.now(timezone.utc) >= expiry
         except Exception:
             pass
