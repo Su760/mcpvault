@@ -118,6 +118,30 @@ mcpvault verify \
   --tool db_query
 ```
 
+## Express.js Quickstart
+
+```bash
+npm install mcpvault-express
+```
+
+```javascript
+import { createMcpVaultMiddleware } from 'mcpvault-express';
+
+const auth = createMcpVaultMiddleware({ publicKeyHex: process.env.MCPVAULT_PUBLIC_KEY });
+
+// Protect a MCP route — only tokens scoped to tool("db_query") can proceed
+app.post('/mcp', auth('db_query'), (req, res) => {
+  // req.mcpvaultFacts.verified === true on success
+  res.json({ ok: true });
+});
+
+// Token extraction order (automatic):
+//   1. X-MCPVault-Token header  (HTTP transport)
+//   2. req.body.params._meta.token  (stdio-over-HTTP / JSON-RPC)
+```
+
+> **Node.js < 22:** Run with `NODE_OPTIONS=--experimental-wasm-modules node server.js`
+
 ---
 
 ## Crates
