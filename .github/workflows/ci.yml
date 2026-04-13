@@ -80,6 +80,22 @@ jobs:
           source ../.venv/bin/activate
           pytest
 
+  js-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: mcpvault-express/package-lock.json
+      - name: Install dependencies
+        working-directory: mcpvault-express
+        run: npm install
+      - name: Run Jest tests
+        working-directory: mcpvault-express
+        run: npm test
+
   lint:
     name: Clippy + rustfmt
     runs-on: ubuntu-latest
